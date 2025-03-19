@@ -4,19 +4,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.annotation.StringRes
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.korniykom.notelist.ui.HomeScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.korniykom.notelist.data.Note
+import com.korniykom.notelist.ui.screen.CreateNoteScreen
+import com.korniykom.notelist.ui.screen.HomeScreen
 import com.korniykom.notelist.ui.theme.NoteListTheme
 import com.korniykom.notelist.ui.viewmodel.NoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
+enum class NoteScreen(@StringRes val title: Int) {
+    Home(title = R.string.app_name),
+    CreateNote(title = R.string.create_note_screen)
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -25,13 +28,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: NoteViewModel = hiltViewModel()
+            val navController = rememberNavController()
             NoteListTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize()
+                NavHost(
+                    navController = navController,
+                    startDestination = NoteScreen.Home.name
                 ) {
-                    HomeScreen(viewModel = viewModel)
+                    composable(route = NoteScreen.Home.name) {
+                        HomeScreen(viewModel = viewModel)
+                    }
+                    composable(route = NoteScreen.CreateNote.name) {
+                        CreateNoteScreen(viewModel = viewModel)
+                    }
                 }
             }
         }
     }
 }
+
