@@ -51,7 +51,8 @@ class MainActivity : ComponentActivity() {
                             viewModel = viewModel,
                             onNavigateToNoteCreation = {
                                 navController.navigate(NoteScreen.CreateNote.name)
-                            }
+                            },
+                            onNoteDelete = {viewModel.removeNote(it) }
                         )
                     }
                     composable(route = NoteScreen.CreateNote.name) {

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.korniykom.notelist.data.Note
 import com.korniykom.notelist.data.NoteDao
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,15 +24,30 @@ class NoteViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            addNote(Note(id = 0, title = "My title", content = "New Content"))
-        }
-        _uiState.update { currentState ->
-            currentState.copy(
-                noteList = noteDao.getAllNotes()
-            )
+            noteDao.getAllNotes().collect() { notes ->
+                sortListOfNotes(notes)
+            }
         }
     }
 
-    suspend fun addNote(note: Note) = noteDao.insertNote(note)
-    suspend fun removeNote(note: Note) = noteDao.deleteNote(note)
+    fun removeNote(note: Note) {
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(300)
+            noteDao.deleteNote(note)
+        }
+    }
+
+    fun addNote(note: Note) {
+        viewModelScope.launch(Dispatchers.IO) {
+            noteDao.insertNote(note)
+            sortListOfNotes(_uiState.value.noteList)
+        }
+    }
+    private fun sortListOfNotes(notes: List<Note>) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                noteList = notes.sortedByDescending { it.createdAt }
+            )
+        }
+    }
 }

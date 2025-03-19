@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 data class NoteUiState(
-    val noteList: Flow<List<Note>> = flowOf(emptyList())
+    val noteList: List<Note> = emptyList()
 )

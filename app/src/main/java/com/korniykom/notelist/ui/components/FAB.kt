@@ -8,6 +8,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -51,9 +52,7 @@ fun FAB(
             animation = keyframes {
                 durationMillis = 3000
                 DarkPurple at 0
-                Purple at 1000
-                Magenta at 2000
-                PinkyPurple at 3000
+                Purple at 3000
             },
             repeatMode = RepeatMode.Reverse
         ),
@@ -66,21 +65,41 @@ fun FAB(
             repeatMode = RepeatMode.Restart
         )
     )
+    val borderColor by infiniteTransition.animateColor(
+        initialValue = Aqua,
+        targetValue = Magenta,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 4000
+                Aqua at 1000
+                DarkBlue at 2000
+                Magenta at 3000
+            },
+            repeatMode = RepeatMode.Reverse
+        ),
+    )
+
     FloatingActionButton(
         modifier = modifier
             .padding(dimensionResource(R.dimen.padding_large))
             .size(80.dp)
             .rotate(rotationAngle)
-            .clip(CircleShape),
+            .clip(CircleShape)
+            .border(
+                color = borderColor,
+                width = 2.dp,
+                shape = CircleShape
+            ),
         onClick = onClick,
-        containerColor = buttonColor
+        containerColor = buttonColor,
+
     ) {
         Icon(
             modifier = modifier
                 .size(50.dp),
             imageVector = Icons.Default.Add,
             contentDescription = "Add Note",
-            tint = Black,
+            tint = borderColor,
         )
     }
 }
