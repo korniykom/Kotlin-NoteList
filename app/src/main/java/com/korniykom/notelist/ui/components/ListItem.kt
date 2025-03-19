@@ -76,6 +76,11 @@ fun ListItem(
         isVisible = true
     }
     AnimatedVisibility(
+        modifier = modifier
+            .padding(
+                horizontal = dimensionResource(R.dimen.padding_medium),
+                vertical = dimensionResource(R.dimen.padding_small)
+            ),
         visible = isVisible,
         enter = slideInHorizontally(
             initialOffsetX = { it / 3 }),

@@ -36,10 +36,7 @@ fun HomeScreen(
                 Box(
                     modifier = modifier
                         .fillMaxSize()
-                        .padding(
-                            horizontal = dimensionResource(R.dimen.padding_medium),
-                            vertical = dimensionResource(R.dimen.padding_small)
-                        )
+
                 ) {
                     ListItem(
                         note = note,
