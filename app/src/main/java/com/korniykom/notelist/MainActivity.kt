@@ -4,44 +4,74 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.korniykom.notelist.data.Note
+import com.korniykom.notelist.ui.screen.CreateNoteScreen
+import com.korniykom.notelist.ui.screen.HomeScreen
+import com.korniykom.notelist.ui.theme.BackgroundColor
 import com.korniykom.notelist.ui.theme.NoteListTheme
+import com.korniykom.notelist.ui.viewmodel.NoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+enum class NoteScreen {
+    Home, CreateNote, EditNote
+}
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val viewModel: NoteViewModel = hiltViewModel()
+            val navController = rememberNavController()
             NoteListTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                NavHost(
+                    modifier = Modifier
+                        .background(BackgroundColor)
+                        .fillMaxSize()
+                        .windowInsetsPadding(WindowInsets.systemBars),
+                    navController = navController,
+                    startDestination = NoteScreen.Home.name
+                ) {
+                    composable(route = NoteScreen.Home.name) {
+                        HomeScreen(
+                            viewModel = viewModel,
+                            onNavigateToNoteCreation = {
+                                navController.navigate(NoteScreen.CreateNote.name)
+                                viewModel.updateCurrentNote(it)
+                            },
+                            onNoteDelete = {
+                                viewModel.removeNote(it)
+                            },
+                            setIsNewNote = {viewModel.setIsNewNote(it)}
+                        )
+                    }
+                    composable(route = NoteScreen.CreateNote.name) {
+                        CreateNoteScreen(
+                            onNoteUpdate = {
+                                viewModel.updateNote(it)
+                                navController.popBackStack()
+                            },
+                            onNoteSave = {
+                                viewModel.addNote(it)
+                                navController.popBackStack()
+                            },
+                            note = viewModel.uiState.value.noteToUpdate,
+                            isNewNote = viewModel.uiState.value.isNewNote
+                        )
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NoteListTheme {
-        Greeting("Android")
     }
 }
