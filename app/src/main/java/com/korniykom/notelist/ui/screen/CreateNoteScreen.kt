@@ -38,6 +38,7 @@ import com.korniykom.notelist.ui.theme.Purple
 import com.korniykom.notelist.ui.theme.White
 import com.korniykom.notelist.ui.theme.Yellow
 import com.korniykom.notelist.ui.viewmodel.NoteViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun CreateNoteScreen(
@@ -106,11 +107,22 @@ fun CreateNoteScreen(
                         onNoteSave(Note(
                             title = titleInput,
                             content = contentInput,
-                            createdAt = creatingTime.toLongOrNull() ?: System.currentTimeMillis()))
+                            createdAt = LocalDateTime.now()))
                     }
                 } else {
                     if(titleInput != "" && contentInput != "") {
-                        onNoteUpdate(note.copy(title = titleInput, content = contentInput, createdAt = creatingTime.toLongOrNull() ?: System.currentTimeMillis()))
+                        onNoteUpdate(
+                            note.copy(
+                                title = titleInput,
+                                content = contentInput,
+                                createdAt =
+                                    try {
+                                        LocalDateTime.parse(creatingTime)
+                                    } catch (e: Exception) {
+                                        LocalDateTime.now()
+                                    }
+                            )
+                        )
                     }
                 }
             },

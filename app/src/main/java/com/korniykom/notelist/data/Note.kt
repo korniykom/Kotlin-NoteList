@@ -2,6 +2,7 @@ package com.korniykom.notelist.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 
 @Entity(tableName = "note")
 data class Note (
@@ -9,5 +10,5 @@ data class Note (
     val id: Int = 0,
     val title: String,
     val content: String,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: LocalDateTime = LocalDateTime.now()
 )
