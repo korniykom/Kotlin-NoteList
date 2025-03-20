@@ -26,39 +26,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.korniykom.notelist.data.Note
 import com.korniykom.notelist.ui.theme.Aqua
 import com.korniykom.notelist.ui.theme.DarkBlue
 import com.korniykom.notelist.ui.theme.DarkPurple
 import com.korniykom.notelist.ui.theme.Magenta
+import com.korniykom.notelist.ui.theme.PinkyPurple
 import com.korniykom.notelist.ui.theme.Purple
+import com.korniykom.notelist.ui.theme.White
 import com.korniykom.notelist.ui.theme.Yellow
 import com.korniykom.notelist.ui.viewmodel.NoteViewModel
 
 @Composable
 fun CreateNoteScreen(
     modifier: Modifier = Modifier,
-    viewModel: NoteViewModel,
-    onNoteSave: (note: Note) -> Unit = {}
+    isNewNote: Boolean = false,
+    onNoteSave: (note: Note) -> Unit = {},
+    onNoteUpdate: (note: Note) -> Unit = {},
+    note: Note = Note(title = "", content = "")
 ) {
-    var titleInput by remember { mutableStateOf("") }
-    var contentInput by remember { mutableStateOf("") }
+    var titleInput by remember { mutableStateOf(note.title) }
+    var contentInput by remember { mutableStateOf(note.content) }
+    var creatingTime by remember { mutableStateOf(note.createdAt.toString())}
 
     val infiniteTransition = rememberInfiniteTransition()
-
-    val buttonColor by infiniteTransition.animateColor(
-        initialValue = DarkPurple,
-        targetValue = Yellow,
-        animationSpec = infiniteRepeatable(
-            animation = keyframes {
-                durationMillis = 3000
-                DarkPurple at 0
-                Purple at 3000
-            },
-            repeatMode = RepeatMode.Reverse
-        ),
-    )
 
     val borderColor by infiniteTransition.animateColor(
         initialValue = Aqua,
@@ -87,9 +80,15 @@ fun CreateNoteScreen(
         )
         Spacer(modifier = modifier.size(32.dp))
         TextField(
-            value = contentInput,
-            onValueChange = { contentInput = it },
-            label = { Text("Note Content") }
+                value = contentInput,
+        onValueChange = { contentInput = it },
+        label = { Text("Note Content") }
+        )
+        Spacer(modifier = modifier.size(32.dp))
+        TextField(
+            value = creatingTime,
+            onValueChange = { creatingTime = it },
+            label = { Text("Creation Time") }
         )
         Spacer(modifier = modifier.size(32.dp))
         Button(
@@ -97,21 +96,31 @@ fun CreateNoteScreen(
                 .size(140.dp, 60.dp)
                 .border(
                     width = 2.dp,
-                    color = borderColor,
+                    color = if(titleInput.isEmpty() and contentInput.isEmpty()) Color.Transparent else borderColor,
                     shape = RoundedCornerShape(12.dp)
                 ),
             shape = RoundedCornerShape(12.dp),
             onClick = {
-                if(titleInput != "" && contentInput != "") {
-                    onNoteSave(Note(title = titleInput, content = contentInput))
+                if(isNewNote) {
+                    if(titleInput != "" && contentInput != "") {
+                        onNoteSave(Note(
+                            title = titleInput,
+                            content = contentInput,
+                            createdAt = creatingTime.toLongOrNull() ?: System.currentTimeMillis()))
+                    }
+                } else {
+                    if(titleInput != "" && contentInput != "") {
+                        onNoteUpdate(note.copy(title = titleInput, content = contentInput, createdAt = creatingTime.toLongOrNull() ?: System.currentTimeMillis()))
+                    }
                 }
             },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = buttonColor,
-                contentColor = borderColor
-            )
+            enabled = (titleInput.isNotBlank() and contentInput.isNotBlank())
         ) {
-            Text("Save Note")
+            Text(
+                text = "Save Note",
+                color = if(titleInput.isEmpty() and contentInput.isEmpty()) White else borderColor
+
+            )
         }
     }
 }

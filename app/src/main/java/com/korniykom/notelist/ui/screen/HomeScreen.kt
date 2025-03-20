@@ -23,9 +23,10 @@ import com.korniykom.notelist.ui.viewmodel.NoteViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: NoteViewModel,
-    onNavigateToNoteCreation: () -> Unit,
-    onNoteDelete: (note: Note) -> Unit = {}
-) {
+    onNavigateToNoteCreation: (note: Note) -> Unit,
+    onNoteDelete: (note: Note) -> Unit = {},
+    setIsNewNote: (value: Boolean) -> Unit
+    ) {
     val uiState by viewModel.uiState.collectAsState()
     Box(
         modifier = modifier
@@ -40,7 +41,11 @@ fun HomeScreen(
                 ) {
                     ListItem(
                         note = note,
-                        onDelete = onNoteDelete
+                        onDelete = onNoteDelete,
+                        navigateToNote = {
+                            setIsNewNote(false)
+                            onNavigateToNoteCreation(it)
+                        }
                     )
                 }
             }
@@ -50,7 +55,11 @@ fun HomeScreen(
                 .align(Alignment.BottomEnd)
         ) {
             FAB(
-                onClick = onNavigateToNoteCreation
+                onClick = {
+                    setIsNewNote(true)
+                    onNavigateToNoteCreation(it)
+
+                }
             )
         }
     }

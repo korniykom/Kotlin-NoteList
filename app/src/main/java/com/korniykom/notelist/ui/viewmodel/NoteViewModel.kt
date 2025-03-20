@@ -43,6 +43,30 @@ class NoteViewModel @Inject constructor(
             sortListOfNotes(_uiState.value.noteList)
         }
     }
+
+    fun updateNote(note: Note) {
+        viewModelScope.launch(Dispatchers.IO) {
+            noteDao.updateNote(note)
+            sortListOfNotes(_uiState.value.noteList)
+        }
+    }
+
+    fun updateCurrentNote(note: Note) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                noteToUpdate = note
+            )
+        }
+    }
+
+    fun setIsNewNote(value: Boolean) {
+        _uiState.update { currentState ->
+        currentState.copy(
+            isNewNote = value
+        )
+        }
+    }
+
     private fun sortListOfNotes(notes: List<Note>) {
         _uiState.update { currentState ->
             currentState.copy(

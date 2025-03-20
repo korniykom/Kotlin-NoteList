@@ -14,6 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.korniykom.notelist.data.Note
 import com.korniykom.notelist.ui.screen.CreateNoteScreen
 import com.korniykom.notelist.ui.screen.HomeScreen
 import com.korniykom.notelist.ui.theme.BackgroundColor
@@ -47,19 +48,27 @@ class MainActivity : ComponentActivity() {
                             viewModel = viewModel,
                             onNavigateToNoteCreation = {
                                 navController.navigate(NoteScreen.CreateNote.name)
+                                viewModel.updateCurrentNote(it)
                             },
                             onNoteDelete = {
                                 viewModel.removeNote(it)
                             },
+                            setIsNewNote = {viewModel.setIsNewNote(it)}
                         )
                     }
                     composable(route = NoteScreen.CreateNote.name) {
                         CreateNoteScreen(
-                            viewModel = viewModel,
+                            onNoteUpdate = {
+                                viewModel.updateNote(it)
+                                navController.popBackStack()
+                            },
                             onNoteSave = {
                                 viewModel.addNote(it)
                                 navController.popBackStack()
-                            })
+                            },
+                            note = viewModel.uiState.value.noteToUpdate,
+                            isNewNote = viewModel.uiState.value.isNewNote
+                        )
                     }
                 }
             }

@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import com.korniykom.notelist.R
+import com.korniykom.notelist.data.Note
 import com.korniykom.notelist.ui.theme.Aqua
 import com.korniykom.notelist.ui.theme.Black
 import com.korniykom.notelist.ui.theme.DarkBlue
@@ -42,7 +43,7 @@ import com.korniykom.notelist.ui.theme.Yellow
 @Composable
 fun FAB(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: (note: Note) -> Unit = {}
 ) {
     val infiniteTransition = rememberInfiniteTransition()
     val buttonColor by infiniteTransition.animateColor(
@@ -90,7 +91,7 @@ fun FAB(
                 width = 2.dp,
                 shape = CircleShape
             ),
-        onClick = onClick,
+        onClick = {onClick(Note(title = "", content = ""))},
         containerColor = buttonColor,
 
     ) {
