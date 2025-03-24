@@ -1,5 +1,6 @@
 package com.korniykom.notelist
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,29 +11,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.korniykom.notelist.data.Note
 import com.korniykom.notelist.ui.screen.CreateNoteScreen
 import com.korniykom.notelist.ui.screen.HomeScreen
 import com.korniykom.notelist.ui.theme.BackgroundColor
 import com.korniykom.notelist.ui.theme.NoteListTheme
 import com.korniykom.notelist.ui.viewmodel.NoteViewModel
-import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 enum class NoteScreen {
-    Home, CreateNote, EditNote
+    Home, CreateNote
 }
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var viewModel: NoteViewModel
+
+    @SuppressLint("StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (application as NoteApplication).appComponent.inject(this)
+
         enableEdgeToEdge()
         setContent {
-            val viewModel: NoteViewModel = hiltViewModel()
             val navController = rememberNavController()
             NoteListTheme {
                 NavHost(
