@@ -1,13 +1,10 @@
 package com.korniykom.notelist.ui.screen
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -31,13 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.korniykom.notelist.data.Note
 import com.korniykom.notelist.ui.theme.Aqua
 import com.korniykom.notelist.ui.theme.DarkBlue
-import com.korniykom.notelist.ui.theme.DarkPurple
 import com.korniykom.notelist.ui.theme.Magenta
-import com.korniykom.notelist.ui.theme.PinkyPurple
-import com.korniykom.notelist.ui.theme.Purple
 import com.korniykom.notelist.ui.theme.White
-import com.korniykom.notelist.ui.theme.Yellow
-import com.korniykom.notelist.ui.viewmodel.NoteViewModel
 import java.time.LocalDateTime
 
 @Composable

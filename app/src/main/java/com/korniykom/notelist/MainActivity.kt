@@ -55,10 +55,8 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(NoteScreen.CreateNote.name)
                                 viewModel.updateCurrentNote(it)
                             },
-                            onNoteDelete = {
-                                viewModel.removeNote(it)
-                            },
-                            setIsNewNote = {viewModel.setIsNewNote(it)}
+                            onNoteDelete = viewModel::removeNote,
+                            setIsNewNote = viewModel::setIsNewNote
                         )
                     }
                     composable(route = NoteScreen.CreateNote.name) {

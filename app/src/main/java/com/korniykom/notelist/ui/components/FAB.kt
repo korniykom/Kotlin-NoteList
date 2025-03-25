@@ -9,7 +9,6 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -19,7 +18,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -28,16 +26,10 @@ import androidx.compose.ui.unit.dp
 import com.korniykom.notelist.R
 import com.korniykom.notelist.data.Note
 import com.korniykom.notelist.ui.theme.Aqua
-import com.korniykom.notelist.ui.theme.Black
 import com.korniykom.notelist.ui.theme.DarkBlue
 import com.korniykom.notelist.ui.theme.DarkPurple
-import com.korniykom.notelist.ui.theme.Green
 import com.korniykom.notelist.ui.theme.Magenta
-import com.korniykom.notelist.ui.theme.Orange
-import com.korniykom.notelist.ui.theme.PinkyPurple
 import com.korniykom.notelist.ui.theme.Purple
-import com.korniykom.notelist.ui.theme.Red
-import com.korniykom.notelist.ui.theme.White
 import com.korniykom.notelist.ui.theme.Yellow
 
 @Composable

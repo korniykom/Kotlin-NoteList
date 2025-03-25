@@ -8,7 +8,6 @@ import com.korniykom.notelist.NoteApplication
 import com.korniykom.notelist.data.NoteDao
 import com.korniykom.notelist.data.NoteDatabase
 import com.korniykom.notelist.ui.viewmodel.NoteViewModel
-import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
